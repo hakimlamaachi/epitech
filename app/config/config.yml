@@ -66,11 +66,11 @@ swiftmailer:
     password:  "%mailer_password%"
     spool:     { type: memory }
 
-blade_tester_calendar:
-    driver: doctrine/orm
-    engine: twig
-    classes:
-        event:
-            entity: BladeTester\CalendarBundle\Entity\Event
-        category:
-            entity: BladeTester\CalendarBundle\Entity\EventCategory
+#blade_tester_calendar:
+#    driver: doctrine/orm
+#    engine: twig
+#    classes:
+#        event:
+#            entity: BladeTester\CalendarBundle\Entity\Event
+#        category:
+#            entity: BladeTester\CalendarBundle\Entity\EventCategory

@@ -1,3 +1,7 @@
+app_booking_services:
+    resource: "@AppBookingBundle/Resources/config/routing/services.yml"
+    prefix:   /services
+
 app_booking_homepage:
     path:     /
     defaults: { _controller: AppBookingBundle:Default:index }
