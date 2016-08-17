@@ -44,7 +44,7 @@ class ServicesController extends Controller
             $em->persist($service);
             $em->flush();
 
-            return $this->redirectToRoute('services_show', array('id' => $services->getId()));
+            return $this->redirectToRoute('services_show', array('id' => $service->getId()));
         }
 
         return $this->render('services/new.html.twig', array(

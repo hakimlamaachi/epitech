@@ -1,10 +1,15 @@
 app_booking:
     resource: "@AppBookingBundle/Resources/config/routing.yml"
     prefix:   /
-
-app:
-    resource: "@AppBundle/Controller/"
-    type:     annotation
+app_booking_user:
+        resource: "@AppBookingBundle/Resources/config/routing/user.yml"
+        prefix:   /user
+app_booking_user:
+        resource: "@AppBookingBundle/Resources/config/routing/services.yml"
+        prefix:   /services
+#app:
+#    resource: "@AppBundle/Controller/"
+#    type:     annotation
 #BladeTesterCalendarBundle:
 #    resource: "@BladeTesterCalendarBundle/Resources/config/routing.yml"
 #    prefix:   /
