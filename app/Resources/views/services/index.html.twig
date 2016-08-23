@@ -1,15 +1,65 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <h1>User list</h1>
+
+    <table border="1">
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Nom</th>
+            <th>Prenom</th>
+            <th>Email</th>
+            <th>Password</th>
+            <th>Departement</th>
+            <th>Isactive</th>
+            <th>Photo</th>
+            <th>Roles</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for user in users %}
+            <tr>
+                <td><a href="{{ path('user_show', { 'id': user.id }) }}">{{ user.id }}</a></td>
+                <td>{{ user.nom }}</td>
+                <td>{{ user.prenom }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.password }}</td>
+                <td>{{ user.departement }}</td>
+                <td>{% if user.isActive %}Yes{% else %}No{% endif %}</td>
+                <td>{{ user.photo }}</td>
+                <td>{% if user.roles %}{{ user.roles|join(', ') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('user_show', { 'id': user.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('user_edit', { 'id': user.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('user_new') }}">Create a new entry</a>
+        </li>
+    </ul>
     <h1>Services list</h1>
 
-    <table>
+    <table border="1">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Title</th>
                 <th>Color</th>
                 <th>Description</th>
+                <th>zones</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -20,6 +70,40 @@
                 <td>{{ service.title }}</td>
                 <td>{{ service.color }}</td>
                 <td>{{ service.description }}</td>
+                <td>    <table border="1">
+                        <thead>
+                        <tr>
+                            <th>Id</th>
+                            <th>Title</th>
+                            <th>Prix</th>
+                            <th>Duree</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for zone in service.zones %}
+                            <tr>
+                                <td><a href="{{ path('zone_show', { 'id': zone.id }) }}">{{ zone.id }}</a></td>
+                                <td>{{ zone.title }}</td>
+                                <td>{{ zone.prix }}</td>
+                                <td>{% if zone.duree %}{{ zone.duree|date('Y-m-d H:i:s') }}{% endif %}</td>
+                                <td>{{ zone.description }}</td>
+                                <td>
+                                    <ul>
+                                        <a class="red " onclick="return confirm('Etes vous sur de vouloir supprimer ce utilisateur');" href="{{ path('zoneservicesup', { id: service.id , idd: zone.id   }) }}">
+                                            Supprimer
+                                        </a>
+                                        <li>
+                                            <a href="{{ path('zone_edit', { 'id': zone.id }) }}">edit</a>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </td>
                 <td>
                     <ul>
                         <li>

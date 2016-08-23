@@ -5,6 +5,7 @@ namespace App\BookingBundle\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+use App\BookingBundle\Entity\Zone;
 use App\BookingBundle\Entity\Services;
 use App\BookingBundle\Form\ServicesType;
 
@@ -23,9 +24,13 @@ class ServicesController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $services = $em->getRepository('AppBookingBundle:Services')->findAll();
+        $users = $em->getRepository('AppBookingBundle:User')->findAll();
+
 
         return $this->render('services/index.html.twig', array(
             'services' => $services,
+            'users' => $users,
+
         ));
     }
 
@@ -108,6 +113,23 @@ class ServicesController extends Controller
         }
 
         return $this->redirectToRoute('services_index');
+    }
+
+    /**
+     * supprimer une zone d'une service
+     */
+    public function removeFromServiceAction(  $id,$idd){
+
+        $em = $this->getDoctrine()->getManager();
+        $services = $em->getRepository('AppBookingBundle:Services')->findOneById($id);
+        $zone = $em->getRepository('AppBookingBundle:Zone')->findOneById($idd);
+
+        $services->removeZone($zone);
+        $zone->removeService($services);
+
+        $em->persist($services);
+        $em->flush();
+        return $this->redirect($this->generateUrl('services_index'));
     }
 
     /**

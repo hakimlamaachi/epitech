@@ -1,0 +1,24 @@
+pratitien_index:
+    path:     /
+    defaults: { _controller: "AppBookingBundle:Pratitien:index" }
+    methods:  GET
+
+pratitien_show:
+    path:     /{id}/show
+    defaults: { _controller: "AppBookingBundle:Pratitien:show" }
+    methods:  GET
+
+pratitien_new:
+    path:     /new
+    defaults: { _controller: "AppBookingBundle:Pratitien:new" }
+    methods:  [GET, POST]
+
+pratitien_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AppBookingBundle:Pratitien:edit" }
+    methods:  [GET, POST]
+
+pratitien_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AppBookingBundle:Pratitien:delete" }
+    methods:  DELETE

@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>HoraireBreaks list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Starttime</th>
+                <th>Endtime</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for horaireBreak in horaireBreaks %}
+            <tr>
+                <td><a href="{{ path('horairebreaks_show', { 'id': horaireBreak.id }) }}">{{ horaireBreak.id }}</a></td>
+                <td>{% if horaireBreak.startTime %}{{ horaireBreak.startTime|date('H:i:s') }}{% endif %}</td>
+                <td>{% if horaireBreak.endTime %}{{ horaireBreak.endTime|date('H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('horairebreaks_show', { 'id': horaireBreak.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('horairebreaks_edit', { 'id': horaireBreak.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('horairebreaks_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

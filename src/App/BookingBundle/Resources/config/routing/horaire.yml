@@ -1,0 +1,24 @@
+horaire_index:
+    path:     /
+    defaults: { _controller: "AppBookingBundle:Horaire:index" }
+    methods:  GET
+
+horaire_show:
+    path:     /{id}/show
+    defaults: { _controller: "AppBookingBundle:Horaire:show" }
+    methods:  GET
+
+horaire_new:
+    path:     /new
+    defaults: { _controller: "AppBookingBundle:Horaire:new" }
+    methods:  [GET, POST]
+
+horaire_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AppBookingBundle:Horaire:edit" }
+    methods:  [GET, POST]
+
+horaire_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AppBookingBundle:Horaire:delete" }
+    methods:  DELETE

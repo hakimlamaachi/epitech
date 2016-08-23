@@ -1,0 +1,118 @@
+<?php
+
+namespace App\BookingBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+/**
+ * HoraireBreaks
+ *
+ * @ORM\Table(name="horaire_breaks")
+ * @ORM\Entity(repositoryClass="App\BookingBundle\Repository\HoraireBreaksRepository")
+ */
+class HoraireBreaks
+{
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    private $id;
+    /**
+     * @ORM\ManyToOne(targetEntity="App\BookingBundle\Entity\Horaire")
+     * @ORM\JoinColumn(name="horaire_id", referencedColumnName="id",onDelete="NO ACTION")
+     */
+    protected $horaire_id;
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="start_time", type="time")
+     */
+    private $startTime;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="end_time", type="time")
+     */
+    private $endTime;
+
+
+    /**
+     * Get id
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set startTime
+     *
+     * @param \DateTime $startTime
+     *
+     * @return HoraireBreaks
+     */
+    public function setStartTime($startTime)
+    {
+        $this->startTime = $startTime;
+
+        return $this;
+    }
+
+    /**
+     * Get startTime
+     *
+     * @return \DateTime
+     */
+    public function getStartTime()
+    {
+        return $this->startTime;
+    }
+
+    /**
+     * Set endTime
+     *
+     * @param \DateTime $endTime
+     *
+     * @return HoraireBreaks
+     */
+    public function setEndTime($endTime)
+    {
+        $this->endTime = $endTime;
+
+        return $this;
+    }
+
+    /**
+     * Get endTime
+     *
+     * @return \DateTime
+     */
+    public function getEndTime()
+    {
+        return $this->endTime;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHoraireId()
+    {
+        return $this->horaire_id;
+    }
+
+    /**
+     * @param mixed $horaire_id
+     */
+    public function setHoraireId($horaire_id)
+    {
+        $this->horaire_id = $horaire_id;
+    }
+
+}
+

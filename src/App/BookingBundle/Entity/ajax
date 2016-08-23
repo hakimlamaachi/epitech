@@ -1,0 +1,516 @@
+Making Ajax calls is a trivial task nowadays for any web developer, and I’m sure it’s no enigma for all of you how to do it using your favourite Javascript library or framework like jQuery, Angular, Backbone, you name it.
+
+
+
+But how do we handle these requests in the backend? More specifically, how should we write our controllers to take full advantage of our preferred framework, Symfony 2 in my case, and create a great UX for our consumers (with errors displayed nicely and effortless) and a great feeling for our colleagues with whom we share the code (by using status codes and promises).
+
+
+Firstly I prepare a basic controller, while trying to respect REST principles. This will prove very valuable later on in the project and your app flow will be easier to follow. A good article on that can be found here .
+
+/Acme/DemoBundle/Controller/DemoController.php
+
+
+[...]
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+[...]
+
+/**
+* Renders the "new" form
+*
+* @Route("/", "demo_new")
+* @Method("GET")
+*/
+public function newAction(Request $request)
+{
+$entity = new Demo();
+$form = $this->createCreateForm($entity);
+
+return $this->render('AcmeDemoBundle:Demo:new.html.twig',
+array(
+'entity' => $entity,
+'form' => $form->createView()
+)
+);
+}
+
+/**
+* Creates a new Demo entity.
+*
+* @Route("/", name="demo_create")
+* @Method("POST")
+*
+*/
+public function createAction(Request $request)
+{
+//This is optional. Do not do this check if you want to call the same action using a regular request.
+if (!$request->isXmlHttpRequest()) {
+return new JsonResponse(array('message' => 'You can access this only using Ajax!'), 400);
+}
+
+$entity = new Demo();
+$form = $this->createCreateForm($entity);
+$form->handleRequest($request);
+
+if ($form->isValid()) {
+$em = $this->getDoctrine()->getManager();
+$em->persist($entity);
+$em->flush();
+
+return new JsonResponse(array('message' => 'Success!'), 200);
+}
+
+$response = new JsonResponse(
+array(
+'message' => 'Error',
+'form' => $this->renderView('AcmeDemoBundle:Demo:form.html.twig',
+array(
+'entity' => $entity,
+'form' => $form->createView(),
+))), 400);
+
+return $response;
+}
+
+/**
+* Creates a form to create a Demo entity.
+*
+* @param Demo $entity The entity
+*
+* @return SymfonyComponentFormForm The form
+*/
+private function createCreateForm(Demo $entity)
+{
+$form = $this->createForm(new DemoType(), $entity,
+array(
+'action' => $this->generateUrl('demo_create'),
+'method' => 'POST',
+));
+
+return $form;
+}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+[...]
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+[...]
+
+/**
+* Renders the "new" form
+*
+* @Route("/", "demo_new")
+* @Method("GET")
+*/
+public function newAction(Request $request)
+{
+$entity = new Demo();
+$form = $this->createCreateForm($entity);
+
+return $this->render('AcmeDemoBundle:Demo:new.html.twig',
+array(
+'entity' => $entity,
+'form' => $form->createView()
+)
+);
+}
+
+/**
+* Creates a new Demo entity.
+*
+* @Route("/", name="demo_create")
+* @Method("POST")
+*
+*/
+public function createAction(Request $request)
+{
+//This is optional. Do not do this check if you want to call the same action using a regular request.
+if (!$request->isXmlHttpRequest()) {
+return new JsonResponse(array('message' => 'You can access this only using Ajax!'), 400);
+}
+
+$entity = new Demo();
+$form = $this->createCreateForm($entity);
+$form->handleRequest($request);
+
+if ($form->isValid()) {
+$em = $this->getDoctrine()->getManager();
+$em->persist($entity);
+$em->flush();
+
+return new JsonResponse(array('message' => 'Success!'), 200);
+}
+
+$response = new JsonResponse(
+array(
+'message' => 'Error',
+'form' => $this->renderView('AcmeDemoBundle:Demo:form.html.twig',
+array(
+'entity' => $entity,
+'form' => $form->createView(),
+))), 400);
+
+return $response;
+}
+
+/**
+* Creates a form to create a Demo entity.
+*
+* @param Demo $entity The entity
+*
+* @return SymfonyComponentFormForm The form
+*/
+private function createCreateForm(Demo $entity)
+{
+$form = $this->createForm(new DemoType(), $entity,
+array(
+'action' => $this->generateUrl('demo_create'),
+'method' => 'POST',
+));
+
+return $form;
+}
+Then I prepare my HTML:
+
+/Acme/DemoBundle/Resources/Demo/new.html.twig
+
+
+{% block body -%}
+    <h1>Demo creation</h1>
+
+    <div class="form_error"></div>
+    <form method="POST" class="ajaxForm" action="{{path('demo_create')}}" {{ form_enctype(form) }}>
+        <div id="form_body">
+            {% include 'AcmeDemoBundle:Demo:form.html.twig' with {'form': form} %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+        {{form_rest(form)}}
+    </form>
+
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('demo') }}">
+                Back to the list
+            </a>
+        </li>
+    </ul>
+{% endblock %}
+
+
+{% block javascripts %}
+    <script>
+        initAjaxForm();
+    </script>
+{% endblock %}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+{% block body -%}
+    <h1>Demo creation</h1>
+
+    <div class="form_error"></div>
+    <form method="POST" class="ajaxForm" action="{{path('demo_create')}}" {{ form_enctype(form) }}>
+        <div id="form_body">
+            {% include 'AcmeDemoBundle:Demo:form.html.twig' with {'form': form} %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+        {{form_rest(form)}}
+    </form>
+
+    <ul class="record_actions">
+        <li>
+            <a href="{{ path('demo') }}">
+                Back to the list
+            </a>
+        </li>
+    </ul>
+{% endblock %}
+
+
+{% block javascripts %}
+    <script>
+        initAjaxForm();
+    </script>
+{% endblock %}
+And then I build the form; It’s always a good practice to put the fields of your form in a separate file so that you can reuse them for the edit form for example.
+
+/Acme/DemoBundle/Resources/Demo/form.html.twig
+
+
+<div class="row" >
+    <div class="col-lg-4 col-md-4">
+        <div class="col-md-12">{{ form_errors(form) }}</div>
+        <div class="bg-danger">{{ form_errors(form.name) }}</div>
+        <div class="form-group input-group">
+            {{ form_widget(form.name,  {'attr': {'placeholder':'Name', 'title':'Name', 'class':'form-control'}}) }}
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="bg-danger">{{ form_errors(form.isActive) }}</div>
+        <div class="form-group">
+            {{ form_widget(form.isActive,  {'attr': {'title':'Is active', 'class':'form-control'}}) }}
+        </div>
+    </div>
+</div>
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+<div class="row" >
+    <div class="col-lg-4 col-md-4">
+        <div class="col-md-12">{{ form_errors(form) }}</div>
+        <div class="bg-danger">{{ form_errors(form.name) }}</div>
+        <div class="form-group input-group">
+            {{ form_widget(form.name,  {'attr': {'placeholder':'Name', 'title':'Name', 'class':'form-control'}}) }}
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="bg-danger">{{ form_errors(form.isActive) }}</div>
+        <div class="form-group">
+            {{ form_widget(form.isActive,  {'attr': {'title':'Is active', 'class':'form-control'}}) }}
+        </div>
+    </div>
+</div>
+And to tie the frontend with the backend we add a little Javascript (JQuery flavoured). This code simply listens to all submits from the page, and if the submitted form has the class ajaxForm then it submits it using Ajax.
+
+
+
+Thanks to the handy promises .done and .fail, and to the use of status codes in our response (400  -> Bad request, 200 -> Ok, 404 -> Not Found and so on) the script will automatically go to the right promise and will make handling the response a lot easier. Also, if an error occurs in your form (e.g. a field is invalid), then the form is re-rendered with the errors displayed.
+
+
+
+/Acme/DemoBundle/Resources/public/main.js
+
+
+function initAjaxForm()
+{
+$('body').on('submit', '.ajaxForm', function (e) {
+
+e.preventDefault();
+
+$.ajax({
+type: $(this).attr('method'),
+url: $(this).attr('action'),
+data: $(this).serialize()
+})
+.done(function (data) {
+if (typeof data.message !== 'undefined') {
+alert(data.message);
+}
+})
+.fail(function (jqXHR, textStatus, errorThrown) {
+if (typeof jqXHR.responseJSON !== 'undefined') {
+if (jqXHR.responseJSON.hasOwnProperty('form')) {
+$('#form_body').html(jqXHR.responseJSON.form);
+}
+
+$('.form_error').html(jqXHR.responseJSON.message);
+
+} else {
+alert(errorThrown);
+}
+
+});
+});
+}
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+function initAjaxForm()
+{
+$('body').on('submit', '.ajaxForm', function (e) {
+
+e.preventDefault();
+
+$.ajax({
+type: $(this).attr('method'),
+url: $(this).attr('action'),
+data: $(this).serialize()
+})
+.done(function (data) {
+if (typeof data.message !== 'undefined') {
+alert(data.message);
+}
+})
+.fail(function (jqXHR, textStatus, errorThrown) {
+if (typeof jqXHR.responseJSON !== 'undefined') {
+if (jqXHR.responseJSON.hasOwnProperty('form')) {
+$('#form_body').html(jqXHR.responseJSON.form);
+}
+
+$('.form_error').html(jqXHR.responseJSON.message);
+
+} else {
+alert(errorThrown);
+}
+
+});
+});
+}
+
+
+Going a little further, you could put this form in a modal (easily done with bootstrap) and you can get a really nice user interface with forms in modals submitted with Ajax.
+
+Last but not least, don’t forget to check that your routings are correct in case you didn’t do it already:
+
+app/config/routing.yml
+
+
+demo:
+resource: "@AcmeDemoBundle/Controller/"
+type:     annotation
+prefix:   /
+1
+2
+3
+4
+demo:
+resource: "@AcmeDemoBundle/Controller/"
+type:     annotation
+prefix:   /
+
+
+Have fun coding :)

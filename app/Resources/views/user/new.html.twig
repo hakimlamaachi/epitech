@@ -2,15 +2,33 @@
 
 {% block body %}
     <h1>User creation</h1>
-
-    {{ form_start(form) }}
+<form method="post" id="add-user" action="{{ path('user_ajaxnew') }}" {{ form_enctype(form) }}>
         {{ form_widget(form) }}
         <input type="submit" value="Create" />
-    {{ form_end(form) }}
-
+</form>
     <ul>
         <li>
             <a href="{{ path('user_index') }}">Back to the list</a>
         </li>
     </ul>
 {% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $('#add-user').on('submit',function(e){
+            e.preventDefault();
+            var $form=$(this);
+            $.post($form.attr('action'), $form.serializeArray())
+                    .done(function(data, text, jqxhr){
+                        $('a.epil-user-item').prepend(jqxhr.responseText);
+                    })
+                    .fail(function(jqxhr){
+                        alert(jqxhr.responseText);
+                    })
+                    .always(function() {
+
+                    });
+        });
+    </script>
+{%  endblock %}
+

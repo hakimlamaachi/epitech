@@ -1,0 +1,24 @@
+horairebreaks_index:
+    path:     /
+    defaults: { _controller: "AppBookingBundle:HoraireBreaks:index" }
+    methods:  GET
+
+horairebreaks_show:
+    path:     /{id}/show
+    defaults: { _controller: "AppBookingBundle:HoraireBreaks:show" }
+    methods:  GET
+
+horairebreaks_new:
+    path:     /new
+    defaults: { _controller: "AppBookingBundle:HoraireBreaks:new" }
+    methods:  [GET, POST]
+
+horairebreaks_edit:
+    path:     /{id}/edit
+    defaults: { _controller: "AppBookingBundle:HoraireBreaks:edit" }
+    methods:  [GET, POST]
+
+horairebreaks_delete:
+    path:     /{id}/delete
+    defaults: { _controller: "AppBookingBundle:HoraireBreaks:delete" }
+    methods:  DELETE

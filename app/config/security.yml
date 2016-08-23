@@ -1,20 +1,46 @@
-# To get started with security, check out the documentation:
-# http://symfony.com/doc/current/book/security.html
 security:
+    encoders:
 
+        App\BookingBundle\Entity\User: bcrypt
     # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
+    role_hierarchy:
+        ROLE_CLIENT: ROLE_USER
+        ROLE_SUPER_ADMIN:      [ROLE_DEVIS_AUTO,ROLE_DEVIS_HABITA,ROLE_DEVIS_EPARGNE,ROLE_CHANGEMANT_ADRESSE,ROLE_CHANGEMANT_VEHICULE,ROLE_CHANGEMANT_PACK,ROLE_SINISTRE_AUTO,ROLE_SINISTRE_HABITA,ROLE_GENERATEUR_ACCES,ROLE_GESTION_OPERATEUR]
+
     providers:
-        in_memory:
-            memory: ~
+        chain_providers:
+            chain:
+                 providers: [user_db]
+        user_db:
+                entity: { class: AppBookingBundle:User, property: email }
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-
-        main:
+        admin_secured:
+            pattern:    ^/
             anonymous: ~
+            provider: chain_providers
+            logout:
+                path: /logout
+                target: /login
+            form_login:
+                login_path: /login
+                check_path: /login_check
+                default_target_path: /services
+        admin_login:
+                pattern: ^/login$
+                anonymous: ~
+
+
+
+
+    access_control:
+                - { path: ^/login$, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+#                - { path: ^/user, roles: ROLE_USER }
+#                - { path: ^/*, roles: ROLE_USER }
             # activate different ways to authenticate
 
             # http_basic: ~

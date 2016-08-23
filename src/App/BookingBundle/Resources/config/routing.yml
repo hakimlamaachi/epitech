@@ -1,7 +1,27 @@
 app_booking_services:
     resource: "@AppBookingBundle/Resources/config/routing/services.yml"
     prefix:   /services
+app_booking_pratitien:
+    resource: "@AppBookingBundle/Resources/config/routing/pratitien.yml"
+    prefix:   /pratitien
+app_booking_horairebreaks:
+    resource: "@AppBookingBundle/Resources/config/routing/horairebreaks.yml"
+    prefix:   /horairebreaks
+app_booking_horaire:
+    resource: "@AppBookingBundle/Resources/config/routing/horaire.yml"
+    prefix:   /horaire
+app_booking_conge:
+    resource: "@AppBookingBundle/Resources/config/routing/conge.yml"
+    prefix:   /conge
 
 app_booking_homepage:
     path:     /
     defaults: { _controller: AppBookingBundle:Default:index }
+epil_login:
+    path:     /login
+    defaults: { _controller: AppBookingBundle:Security:login }
+login_check:
+    path:   /login_check
+
+logout:
+    pattern:   /logout

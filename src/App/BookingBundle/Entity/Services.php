@@ -2,7 +2,9 @@
 
 namespace App\BookingBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+
 
 /**
  * Services
@@ -27,7 +29,11 @@ class Services
      * @ORM\Column(name="title", type="string", length=255)
      */
     private $title;
+    /**
+     * @ORM\ManyToMany(targetEntity="App\BookingBundle\Entity\Zone", mappedBy="services",cascade={"persist", "remove"}))
+     */
 
+    private $zones;
     /**
      * @var string
      *
@@ -41,6 +47,12 @@ class Services
      * @ORM\Column(name="description", type="string", length=255)
      */
     private $description;
+
+    function __construct()
+    {
+        $this->zones = new ArrayCollection();
+
+    }
 
 
     /**
@@ -124,5 +136,53 @@ class Services
     {
         return $this->description;
     }
-}
 
+    /**
+     * @return mixed
+     */
+    public function getZones()
+    {
+        return $this->zones;
+    }
+
+    /**
+     * @param mixed $zones
+     */
+    public function setZones($zones)
+    {
+        $this->zones = $zones;
+    }
+/*    public function removeZone(Zone $zone)
+    {
+        $this->zones->removeElement($zone);
+    }
+    public function removeGroup($group)
+    {
+        //optionally add a check here to see that $group exists before removing it.
+        return $this->groups->removeElement($group);
+    }*/
+
+    /**
+     * Add zone
+     *
+     * @param \App\BookingBundle\Entity\Zone $zone
+     *
+     * @return Services
+     */
+    public function addZone(\App\BookingBundle\Entity\Zone $zone)
+    {
+        $this->zones[] = $zone;
+
+        return $this;
+    }
+
+    /**
+     * Remove zone
+     *
+     * @param \App\BookingBundle\Entity\Zone $zone
+     */
+    public function removeZone(\App\BookingBundle\Entity\Zone $zone)
+    {
+        $this->zones->removeElement($zone);
+    }
+}

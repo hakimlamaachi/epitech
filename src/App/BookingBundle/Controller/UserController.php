@@ -2,11 +2,13 @@
 
 namespace App\BookingBundle\Controller;
 
+use App\BookingBundle\Entity\Horaire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use App\BookingBundle\Entity\User;
 use App\BookingBundle\Form\UserType;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * User controller.
@@ -41,9 +43,63 @@ class UserController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $nom = $form["nom"]->getData();
+            $email = $form["email"]->getData();
+            $prenom = $form["prenom"]->getData();
             $em->persist($user);
             $em->flush();
+            $newuser = $em->getRepository('AppBookingBundle:User')
+                ->findOneby(array('nom' => $nom,'prenom' => $prenom,'email' => $email));
 
+                $horaire = new Horaire();
+                $horaire->setIndexJour(1);
+                $horaire->setStartTime(new \DateTime('08:00:00'));
+                $horaire->setEndTime(new \DateTime('18:00:00'));
+                $horaire->setUserId($newuser);
+                $em->persist($horaire);
+                $em->flush();
+                $horaire = new Horaire();
+                $horaire->setIndexJour(2);
+                $horaire->setStartTime(new \DateTime('08:00:00'));
+                $horaire->setEndTime(new \DateTime('18:00:00'));
+                $horaire->setUserId($newuser);
+                $em->persist($horaire);
+                $em->flush();
+                $horaire = new Horaire();
+                $horaire->setIndexJour(3);
+                $horaire->setStartTime(new \DateTime('08:00:00'));
+                $horaire->setEndTime(new \DateTime('18:00:00'));
+                $horaire->setUserId($newuser);
+                $em->persist($horaire);
+                $em->flush();
+                $horaire = new Horaire();
+                $horaire->setIndexJour(4);
+                $horaire->setStartTime(new \DateTime('08:00:00'));
+                $horaire->setEndTime(new \DateTime('18:00:00'));
+                $horaire->setUserId($newuser);
+                $em->persist($horaire);
+                $em->flush();
+                $horaire = new Horaire();
+                $horaire->setIndexJour(5);
+                $horaire->setStartTime(new \DateTime('08:00:00'));
+                $horaire->setEndTime(new \DateTime('18:00:00'));
+                $horaire->setUserId($newuser);
+                $em->persist($horaire);
+                $em->flush();
+                $horaire = new Horaire();
+                $horaire->setIndexJour(6);
+                $horaire->setStartTime(null);
+                $horaire->setEndTime(null);
+                $horaire->setUserId($newuser);
+                $em->persist($horaire);
+                $em->flush();
+                $horaire = new Horaire();
+                $horaire->setIndexJour(7);
+                $horaire->setStartTime(null);
+                $horaire->setEndTime(null);
+                $horaire->setUserId($newuser);
+                $em->persist($horaire);
+                $em->flush();
             return $this->redirectToRoute('user_show', array('id' => $user->getId()));
         }
 
@@ -52,7 +108,79 @@ class UserController extends Controller
             'form' => $form->createView(),
         ));
     }
+    public function ajaxnewAction(Request $request)
+    {
+        $user = new User();
+        $form = $this->createForm(new UserType(), $user);
+        $form->handleRequest($request);
+        $em = $this->getDoctrine()->getManager();
+        $users = $em->getRepository('AppBookingBundle:User')->findAll();
 
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $nom = $form["nom"]->getData();
+            $email = $form["email"]->getData();
+            $prenom = $form["prenom"]->getData();
+            $em->persist($user);
+            $em->flush();
+            $newuser = $em->getRepository('AppBookingBundle:User')
+                ->findOneby(array('nom' => $nom, 'prenom' => $prenom, 'email' => $email));
+
+            $horaire = new Horaire();
+            $horaire->setIndexJour(1);
+            $horaire->setStartTime(new \DateTime('08:00:00'));
+            $horaire->setEndTime(new \DateTime('18:00:00'));
+            $horaire->setUserId($newuser);
+            $em->persist($horaire);
+            $em->flush();
+            $horaire = new Horaire();
+            $horaire->setIndexJour(2);
+            $horaire->setStartTime(new \DateTime('08:00:00'));
+            $horaire->setEndTime(new \DateTime('18:00:00'));
+            $horaire->setUserId($newuser);
+            $em->persist($horaire);
+            $em->flush();
+            $horaire = new Horaire();
+            $horaire->setIndexJour(3);
+            $horaire->setStartTime(new \DateTime('08:00:00'));
+            $horaire->setEndTime(new \DateTime('18:00:00'));
+            $horaire->setUserId($newuser);
+            $em->persist($horaire);
+            $em->flush();
+            $horaire = new Horaire();
+            $horaire->setIndexJour(4);
+            $horaire->setStartTime(new \DateTime('08:00:00'));
+            $horaire->setEndTime(new \DateTime('18:00:00'));
+            $horaire->setUserId($newuser);
+            $em->persist($horaire);
+            $em->flush();
+            $horaire = new Horaire();
+            $horaire->setIndexJour(5);
+            $horaire->setStartTime(new \DateTime('08:00:00'));
+            $horaire->setEndTime(new \DateTime('18:00:00'));
+            $horaire->setUserId($newuser);
+            $em->persist($horaire);
+            $em->flush();
+            $horaire = new Horaire();
+            $horaire->setIndexJour(6);
+            $horaire->setStartTime(null);
+            $horaire->setEndTime(null);
+            $horaire->setUserId($newuser);
+            $em->persist($horaire);
+            $em->flush();
+            $horaire = new Horaire();
+            $horaire->setIndexJour(7);
+            $horaire->setStartTime(null);
+            $horaire->setEndTime(null);
+            $horaire->setUserId($newuser);
+            $em->persist($horaire);
+            $em->flush();
+
+
+        }
+        return new Response('Ajout est  effectué avec succès');
+
+    }
     /**
      * Finds and displays a User entity.
      *
@@ -98,18 +226,20 @@ class UserController extends Controller
      */
     public function deleteAction(Request $request, User $user)
     {
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
         $form = $this->createDeleteForm($user);
         $form->handleRequest($request);
+        if ($request->isXmlHttpRequest()) {
 
-        if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $em->remove($user);
-            $em->flush();
-        }
+        $em->remove($user);
+        $em->flush();
+            $response->setContent( json_encode(array('etat'=>true)));
 
-        return $this->redirectToRoute('user_index');
+       }
+        return $response;
     }
-
     /**
      * Creates a form to delete a User entity.
      *

@@ -42,6 +42,18 @@ class User implements UserInterface, AdvancedUserInterface
      * @ORM\Column(name="prenom", type="string", length=255)
      */
     private $prenom;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="adresse", type="string", length=255)
+     */
+    private $adresse;
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="telephone", type="string", length=255)
+     */
+    private $tele;
 
     /**
      * @var string
@@ -51,28 +63,28 @@ class User implements UserInterface, AdvancedUserInterface
      *     checkMX = true,
      *     checkHost = true
      * )
-     * @ORM\Column(name="email", type="string", length=255, unique= true)
+     * @ORM\Column(name="email", type="string", length=255, unique= true,nullable=true)
      */
     private $email;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="password", type="string", length=255)
+     * @ORM\Column(name="password", type="string", length=255,nullable=true)
      */
     private $password;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="departement", type="string", length=255)
+     * @ORM\Column(name="departement", type="string", length=255,nullable=true)
      */
     protected $departement;
 
     /**
      * @var boolean
      *
-     * @ORM\Column(name="is_active", type="boolean")
+     * @ORM\Column(name="is_active", type="boolean",nullable=true)
      */
     private $isActive =true;
 
@@ -85,7 +97,7 @@ class User implements UserInterface, AdvancedUserInterface
     /**
      * @var array
      *
-     * @ORM\Column(name="roles", type="array")
+     * @ORM\Column(name="roles", type="array",nullable=true)
      */
     protected $roles;
 
@@ -465,6 +477,39 @@ class User implements UserInterface, AdvancedUserInterface
     public function isCredentialsNonExpired()
     {
         return true;    }
+
+    /**
+     * @return string
+     */
+    public function getAdresse()
+    {
+        return $this->adresse;
+    }
+
+    /**
+     * @param string $adresse
+     */
+    public function setAdresse($adresse)
+    {
+        $this->adresse = $adresse;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTele()
+    {
+        return $this->tele;
+    }
+
+    /**
+     * @param string $tele
+     */
+    public function setTele($tele)
+    {
+        $this->tele = $tele;
+    }
+
 
 //    function __toString()
 //    {

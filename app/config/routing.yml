@@ -4,9 +4,15 @@ app_booking:
 app_booking_user:
         resource: "@AppBookingBundle/Resources/config/routing/user.yml"
         prefix:   /user
-app_booking_user:
+app_booking_services:
         resource: "@AppBookingBundle/Resources/config/routing/services.yml"
         prefix:   /services
+app_booking_zone:
+        resource: "@AppBookingBundle/Resources/config/routing/zone.yml"
+        prefix:   /zone
+zoneservicesup:
+    path:     removezone/{id}/{idd}/
+    defaults: { _controller: "AppBookingBundle:Services:removeFromService" }
 #app:
 #    resource: "@AppBundle/Controller/"
 #    type:     annotation

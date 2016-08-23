@@ -12,6 +12,10 @@ user_new:
     path:     /new
     defaults: { _controller: "AppBookingBundle:User:new" }
     methods:  [GET, POST]
+user_ajaxnew:
+    path:     /new
+    defaults: { _controller: "AppBookingBundle:User:ajaxnew" }
+    methods:  [GET, POST]
 
 user_edit:
     path:     /{id}/edit
@@ -21,4 +25,7 @@ user_edit:
 user_delete:
     path:     /{id}/delete
     defaults: { _controller: "AppBookingBundle:User:delete" }
-    methods:  DELETE
+user_del:
+    path:     /supp
+    defaults: { _controller: "AppBookingBundle:User:ajaxdel" }
+

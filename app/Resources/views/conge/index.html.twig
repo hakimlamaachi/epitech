@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Conge list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Date</th>
+                <th>Repeatday</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for conge in conges %}
+            <tr>
+                <td><a href="{{ path('conge_show', { 'id': conge.id }) }}">{{ conge.id }}</a></td>
+                <td>{% if conge.date %}{{ conge.date|date('Y-m-d') }}{% endif %}</td>
+                <td>{% if entity.repeatDay %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('conge_show', { 'id': conge.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('conge_edit', { 'id': conge.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('conge_new') }}">Create a new entry</a>
+        </li>
+    </ul>
+{% endblock %}

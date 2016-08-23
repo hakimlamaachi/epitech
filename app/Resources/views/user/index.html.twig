@@ -1,53 +1,210 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>User list</h1>
+    <div id="page-wrapper">
 
-    <table>
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>Prenom</th>
-                <th>Email</th>
-                <th>Password</th>
-                <th>Departement</th>
-                <th>Isactive</th>
-                <th>Photo</th>
-                <th>Roles</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for user in users %}
-            <tr>
-                <td><a href="{{ path('user_show', { 'id': user.id }) }}">{{ user.id }}</a></td>
-                <td>{{ user.nom }}</td>
-                <td>{{ user.prenom }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.password }}</td>
-                <td>{{ user.departement }}</td>
-                <td>{% if user.isActive %}Yes{% else %}No{% endif %}</td>
-                <td>{{ user.photo }}</td>
-                <td>{% if user.roles %}{{ user.roles|join(', ') }}{% endif %}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('user_show', { 'id': user.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('user_edit', { 'id': user.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+        <div class="container-fluid">
+            <div class="container-fields">
+                <div class="big-title">
+                    <h1>Gestions des Services</h1>
+                </div>
+                <div class="row">
+                    <div class="col-md-3">
+                        <!-- Services Container-->
+                        <div id="epil-user-list" class="services-container nav nav-pills">
+                            {% for user in users %}
 
-    <ul>
-        <li>
-            <a href="{{ path('user_new') }}">Create a new entry</a>
-        </li>
-    </ul>
+                                <a class="epil-user-item" data-toggle="tab" href="#{{ user.id }}" aria-expanded="false">
+                                    <div class="service ">
+                                        <i class="fa fa-align-justify" aria-hidden="true"></i>
+                                        <div class="service-name">{{ user.nom }}{{ user.prenom }}</div>
+
+                                        <div class="update"><a href="{{ path('user_edit', { 'id': user.id }) }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                            <a  class="del_user" href="{{ path('user_delete', { 'id': user.id }) }}" ><i class="fa fa-trash" aria-hidden="true"></i></a></div>
+                                    </div>
+                                </a>
+                            {% endfor %}
+                            <div class="add-service" >
+                                <a href="#new"  data-toggle="tab" aria-expanded="false">
+                                    <div class="add-style">
+                                        <i class="fa fa-plus-circle" aria-hidden="true"></i> Ajouter une Pratcienne
+                                    </div>
+                                </a>
+                            </div>
+
+
+                        </div>
+                        <!-- All Services -->
+                    </div>
+                    <div class="col-md-9">
+                        <div class="area-container">
+                            <div class="area">
+                                <div class="area-header">
+                                </div>
+                                <!-- ******************************************************************************** -->
+                                <ul class="nav nav-pills ">
+                                    <li class="" role="presentation">
+                                        <a data-toggle="tab" href="#etudiant1" aria-expanded="false">detail </a></li>
+                                    <li class="" role="presentation">
+                                        <a data-toggle="tab" href="#etudiant12" aria-expanded="false">Le Bureau Des Etudiants </a></li>
+                                </ul>
+                                <div class="area-fields-header">
+                                    <div class="tab-border">
+                                        <div class=" tab-content">
+
+                                            {% for user in users %}
+                                                <div class="tab-pane fade" id="{{ user.id }}">
+                                                    <form>
+                                                        <div class="clear"></div>
+                                                        <div class="choice-fields">
+                                                            <div class="move-left col-md-6">
+                                                                <label for="title">Nom</label>
+                                                                <input class="form-control" type="text" value="{{ user.nom }}">
+                                                            </div>
+                                                            <div class="move-left col-md-6">
+                                                                <label for="price">Prenom</label>
+                                                                <input class="form-control" type="text" value="{{ user.prenom }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="clear"></div>
+                                                        <div class="col-md-12">
+                                                            <label for="description">Adresse</label>
+                                                            <textarea cols="100%" style="display: block;width: 100%" rows="5">{{ user.adresse }}</textarea>
+                                                        </div>
+                                                        <div class="choice-fields">
+                                                            <div class="move-left col-md-6">
+                                                                <label for="title">email</label>
+                                                                <input class="form-control" type="text" value="{{ user.email  }}">
+                                                            </div>
+                                                            <div class="move-left col-md-6">
+                                                                <label for="price">Tele</label>
+                                                                <input class="form-control" type="text" value="{{ user.tele }}">
+                                                            </div>
+                                                        </div>
+                                                        <div class="btn-add">
+                                                            <a href="#" class="save">Enrgistrer</a>
+                                                            <a href="#" class="reset">Réintialiser</a>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            {% endfor %}
+                                            <div class="tab-pane fade" id="new">
+                                                <form id="add-user" method="post" action="{{ path('user_new') }}">
+                                                    <div class="clear"></div>
+                                                    <div class="choice-fields">
+                                                        <div class="move-left col-md-6">
+                                                            <label for="title">Nom</label>
+                                                        </div>
+                                                        <div class="move-left col-md-6">
+                                                            <label for="price">Prenom</label>
+                                                            <input class="form-control" type="text">
+                                                        </div>
+                                                    </div>
+                                                    <div class="clear"></div>
+                                                    <div class="col-md-12">
+                                                        <label for="description">Adresse</label>
+                                                        <textarea cols="100%" style="display: block ;width: 100%" rows="5"></textarea>
+                                                    </div>
+                                                    <div class="choice-fields">
+                                                        <div class="move-left col-md-6">
+                                                            <label for="title">email</label>
+                                                            <input class="form-control" type="text">
+                                                        </div>
+                                                        <div class="move-left col-md-6">
+                                                            <label for="price">Tele</label>
+                                                            <input class="form-control" type="text">
+                                                        </div>
+                                                    </div>
+                                                    <div class="clear"></div>
+                                                    <div class="btn-add">
+                                                        <a href="#" class="save">Enrgistrer</a>
+                                                        <a href="#" class="reset">Réintialiser</a>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- ******************************************************************************** -->
+                                <div class="btn-delete btn-add">
+                                    <a href="#" class="delete"><i class="fa fa-trash" aria-hidden="true"></i> Supprimer</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+
+    </div>
+
+    <div class="row">
+        <ul class="nav nav-pills wow bounceInLeft">
+            <li class="" role="presentation">
+                <a data-toggle="tab" href="#etudiant1" aria-expanded="false">Le Bureau Des Etudiants </a></li>
+            <li class="" role="presentation">
+                <a data-toggle="tab" href="#etudiant12" aria-expanded="false">Le Bureau Des Etudiants </a></li>
+        </ul>
+        <div class="col-md-10 tab-border">
+            <div class="tab-content wow bounceInRight">
+                <div class="tab-pane fade" id="etudiant1">
+                    <div class="col-md-6">
+                        <p>Le BDE propose, tout au long de l'année universitaire, un programme riche et varié d'activités culturelles et sportives et d'évènements thématiques. Plusieurs clubs participent à l'animation de la vie étudiante dans notre université :<br>
+                            Le Club : Musique,de Chant,de Danse,Informatique,Soutien Scolaire,Sport,Humanitairen,Culture,événementiel</p>
+                    </div>
+                    <div class="col-md-6 ">
+                        <img src="http://webeuz-development.com/mundiapolis-cms/sites/all/themes/mundiapolis/images/tabs-img2.jpg"></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10 tab-border">
+            <div class="tab-content wow bounceInRight">
+                <div class="tab-pane fade" id="etudiant12">
+                    <div class="col-md-6">
+                        <p>Le BDE propose, tout au long de l'année universitaire, un programme riche et varié d'activités culturelles et sportives et d'évènements thématiques. Plusieurs clubs participent à l'animation de la vie étudiante dans notre université :<br>
+                            Le Club : Musique,de Chant,de Danse,Informatique,Soutien Scolaire,Sport,Humanitairen,Culture,événementiel</p>
+                    </div>
+                    <div class="col-md-6 ">
+                        <img src="http://webeuz-development.com/mundiapolis-cms/sites/all/themes/mundiapolis/images/tabs-img2.jpg"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+//        $('#add-userform-add').on('submit',function(e){
+//            e.preventDefault();
+//            var $form=$(this);
+//            $.post($form.attr('action'), $form.serializeArray())
+//                    .done(function(data, text, jqxhr){
+//                        $('a.epil-user-item').prepend(jqxhr.responseText);
+//                    })
+//                    .fail(function(jqxhr){
+//                        alert(jqxhr.responseText);
+//                    })
+//                    .always(function() {
+//
+//                    });
+//        });
+        $(".del_user").on('click',function(e){
+            e.preventDefault();
+            $a =  $(this);
+            var url = $a.attr('href');
+            var ok=confirm("vous etes sur ?");
+            if (ok){
+                $.ajax(url,{
+                    success: function () {
+                        $a.parents('div.service').fadeOut();
+                    }
+
+                })            }
+            return ok ;
+        });
+    </script>
+{%  endblock %}
+
+
