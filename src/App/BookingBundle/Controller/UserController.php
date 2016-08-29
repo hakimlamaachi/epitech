@@ -3,6 +3,7 @@
 namespace App\BookingBundle\Controller;
 
 use App\BookingBundle\Entity\Horaire;
+use App\BookingBundle\Form\UserserviceType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -218,6 +219,25 @@ class UserController extends Controller
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
+    }   /**
+     * Displays a form to edit an existing User entity.
+     *
+     */
+    public function editajaxuserAction(Request $request, $id)
+
+    {
+        if($request->isXmlHttpRequest()) {
+            $em = $this->getDoctrine()->getManager();
+            $entity = $em->getRepository('AppBookingBundle:User')->find($id);
+            $entity->setNom($request->get("nom"));
+            $entity->setPrenom($request->get("prenom"));
+            $em->persist($entity);
+            $em->flush();
+        $response = new Response();
+        return $response;
+        }
+        return false;
+
     }
 
     /**
@@ -239,6 +259,91 @@ class UserController extends Controller
 
        }
         return $response;
+    }
+ /**
+     * Deletes a User entity.
+     *
+     */
+    public function AjaxSelectAction(Request $request,$id)
+    {
+        /*$em = $this->getDoctrine()->getManager();
+        $user= $em->getRepository('AppBookingBundle:User')->find($id);
+        $array_user=array();
+        $array_user["id"]=array(); $array_user["nom"]=array();
+        $array_user["prenom"]=array();$array_user["email"]=array();
+
+
+        array_push($array_user["id"], $user->getId());
+        array_push($array_user["nom"], $user->getNom());
+        array_push($array_user["prenom"], $user->getPrenom());
+        array_push($array_user["prenom"], $user->getEmail());
+
+        $json = json_encode(array(
+            'user' => $array_user,
+        ));
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent($json);
+        return $response;*/
+        if ($this->container->get('request')->isXmlHttpRequest()) {
+            $em = $this->getDoctrine()->getManager();
+
+            $user = $em->getRepository('AppBookingBundle:User')->find($id);
+
+            if (!$user) {
+                throw $this->createNotFoundException('Unable to find Client entity.');
+            }
+            $editForm = $this->createForm(new UserType(), $user);
+            $editFormservice = $this->createForm(new UserserviceType(), $user);
+            $editForm->handleRequest($request);
+            $editFormservice->handleRequest($request);
+            return $this->container->get('templating')->renderResponse('user/cordonner.html.twig', array(
+                'editForm' => $editForm->createView(),
+                'editFormservice' => $editFormservice->createView(),
+                'user'=>$user
+            ));
+        }
+    }
+    public function AjaxSelect1Action(Request $request,$id)
+    {
+        /*$em = $this->getDoctrine()->getManager();
+        $user= $em->getRepository('AppBookingBundle:User')->find($id);
+        $array_user=array();
+        $array_user["id"]=array(); $array_user["nom"]=array();
+        $array_user["prenom"]=array();$array_user["email"]=array();
+
+
+        array_push($array_user["id"], $user->getId());
+        array_push($array_user["nom"], $user->getNom());
+        array_push($array_user["prenom"], $user->getPrenom());
+        array_push($array_user["prenom"], $user->getEmail());
+
+        $json = json_encode(array(
+            'user' => $array_user,
+        ));
+
+        $response = new Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent($json);
+        return $response;*/
+        if ($this->container->get('request')->isXmlHttpRequest()) {
+            $em = $this->getDoctrine()->getManager();
+
+            $user = $em->getRepository('AppBookingBundle:User')->find($id);
+
+            if (!$user) {
+                throw $this->createNotFoundException('Unable to find Client entity.');
+            }
+            $editForm = $this->createForm(new UserType(), $user);
+            $editFormservice = $this->createForm(new UserserviceType(), $user);
+            $editForm->handleRequest($request);
+            $editFormservice->handleRequest($request);
+            return $this->container->get('templating')->renderResponse('user/cordonner1.html.twig', array(
+                'editFormservice' => $editFormservice->createView(),
+                'user'=>$user
+            ));
+        }
     }
     /**
      * Creates a form to delete a User entity.

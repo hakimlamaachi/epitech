@@ -1,0 +1,7 @@
+
+{% if editFormservice is defined %}
+<form method="post" id="add-user" action="{{ path('user_edit',{'id': user.id }) }}" {{ form_enctype(editFormservice) }}>
+    {{ form_widget(editFormservice) }}
+    <input type="submit" value="Edit" />
+</form>
+{% endif %}

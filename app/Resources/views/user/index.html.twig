@@ -6,7 +6,7 @@
         <div class="container-fluid">
             <div class="container-fields">
                 <div class="big-title">
-                    <h1>Gestions des Services</h1>
+                    <h1>Gestions des pratitiennes</h1>
                 </div>
                 <div class="row">
                     <div class="col-md-3">
@@ -14,7 +14,7 @@
                         <div id="epil-user-list" class="services-container nav nav-pills">
                             {% for user in users %}
 
-                                <a class="epil-user-item" data-toggle="tab" href="#{{ user.id }}" aria-expanded="false">
+                                <a class="epil-user-item" data-toggle="tab" data-id="{{ user.id }}" href="{{ path('ajax_select_user', { 'id': user.id }) }}" >
                                     <div class="service ">
                                         <i class="fa fa-align-justify" aria-hidden="true"></i>
                                         <div class="service-name">{{ user.nom }}{{ user.prenom }}</div>
@@ -22,10 +22,18 @@
                                         <div class="update"><a href="{{ path('user_edit', { 'id': user.id }) }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                             <a  class="del_user" href="{{ path('user_delete', { 'id': user.id }) }}" ><i class="fa fa-trash" aria-hidden="true"></i></a></div>
                                     </div>
-                                </a>
+                                    </a>
+
                             {% endfor %}
+                            {#<a class="epil-user-item1" data-toggle="tab" href="{{ path('services_select', { 'id': 1 }) }}" aria-expanded="false">
+                                <div class="service ">
+                                    <i class="fa fa-align-justify" aria-hidden="true"></i>
+                                    <div class="service-name">lkjfpopjpepojefoefoj</div>
+
+                                </div>
+                            </a>#}
                             <div class="add-service" >
-                                <a href="#new"  data-toggle="tab" aria-expanded="false">
+                                <a href="#edit-user" class="edit-user"  data-toggle="tab" aria-expanded="false">
                                     <div class="add-style">
                                         <i class="fa fa-plus-circle" aria-hidden="true"></i> Ajouter une Pratcienne
                                     </div>
@@ -42,86 +50,150 @@
                                 <div class="area-header">
                                 </div>
                                 <!-- ******************************************************************************** -->
-                                <ul class="nav nav-pills ">
-                                    <li class="" role="presentation">
-                                        <a data-toggle="tab" href="#etudiant1" aria-expanded="false">detail </a></li>
-                                    <li class="" role="presentation">
-                                        <a data-toggle="tab" href="#etudiant12" aria-expanded="false">Le Bureau Des Etudiants </a></li>
+                                <ul class="nav nav-tabs "><li class="active" id="user"  role="presentation">
+                                        <a data-toggle="tab" href="#edit-user">Details</a></li>
+                                    <li role="presentation" id="service">
+                                        <a data-toggle="tab"  href="#edit-service">Services</a></li>
+                                    <li role="presentation" id="agenda" >
+                                        <a data-toggle="tab" href="#edit-agenda">Agenda</a></li>
+                                    <li role="presentation" id="off">
+                                        <a data-toggle="tab" href="#jour-off">Jour off</a></li>
+                                    <li role="presentation" id="acc">
+                                        <a data-toggle="tab"  href="#acces">Authentification</a></li>
                                 </ul>
                                 <div class="area-fields-header">
                                     <div class="tab-border">
                                         <div class=" tab-content">
-
-                                            {% for user in users %}
-                                                <div class="tab-pane fade" id="{{ user.id }}">
-                                                    <form>
+                                                    <div  id="edit-user" class="tab-pane fade active in">
+                                                    {#<form method="post" id="edit" action="" >
                                                         <div class="clear"></div>
                                                         <div class="choice-fields">
                                                             <div class="move-left col-md-6">
                                                                 <label for="title">Nom</label>
-                                                                <input class="form-control" type="text" value="{{ user.nom }}">
+                                                                <input class="form-control" type="text" name="nom" id="nom">
                                                             </div>
                                                             <div class="move-left col-md-6">
                                                                 <label for="price">Prenom</label>
-                                                                <input class="form-control" type="text" value="{{ user.prenom }}">
+                                                                <input class="form-control" type="text" name="prenom" id="prenom">
                                                             </div>
                                                         </div>
                                                         <div class="clear"></div>
                                                         <div class="col-md-12">
                                                             <label for="description">Adresse</label>
-                                                            <textarea cols="100%" style="display: block;width: 100%" rows="5">{{ user.adresse }}</textarea>
+                                                            <textarea cols="100%" style="display: block;width: 100%" rows="5" id="adresse"></textarea>
                                                         </div>
                                                         <div class="choice-fields">
                                                             <div class="move-left col-md-6">
                                                                 <label for="title">email</label>
-                                                                <input class="form-control" type="text" value="{{ user.email  }}">
+                                                                <input class="form-control" type="text" id="email">
                                                             </div>
                                                             <div class="move-left col-md-6">
                                                                 <label for="price">Tele</label>
-                                                                <input class="form-control" type="text" value="{{ user.tele }}">
+                                                                <input class="form-control" type="text" id="tele" >
                                                             </div>
                                                         </div>
                                                         <div class="btn-add">
-                                                            <a href="#" class="save">Enrgistrer</a>
+
+                                                        <input type="submit"  class="save" value="save">
+
                                                             <a href="#" class="reset">Réintialiser</a>
                                                         </div>
-                                                    </form>
+                                                    </form>#}
+                                                        <div id="cordonner">
+                                                            {% include 'user/cordonner.html.twig' %}
+                                                        </div>
+
+                                                    </div>
+                                            <div  id="edit-service" class="tab-pane fade active in">
+                                                <div id="cordonner1">
+                                                    {% include 'user/cordonner1.html.twig' %}
                                                 </div>
-                                            {% endfor %}
-                                            <div class="tab-pane fade" id="new">
-                                                <form id="add-user" method="post" action="{{ path('user_new') }}">
+
+                                            </div>
+                                            <div  id="edit-agenda" class="tab-pane fade ">
+                                                <form method="post" id="agenda" action="" >
                                                     <div class="clear"></div>
                                                     <div class="choice-fields">
-                                                        <div class="move-left col-md-6">
-                                                            <label for="title">Nom</label>
+                                                        <div class="move-left col-md-2">
+                                                            <label for="title">Lundi</label>
                                                         </div>
-                                                        <div class="move-left col-md-6">
-                                                            <label for="price">Prenom</label>
-                                                            <input class="form-control" type="text">
+                                                        <div class="move-left col-md-2">
+                                                            <input class="form-control" type="time" name="lundi-start" id="nom">
+                                                        </div>
+                                                        <div class="move-left col-md-2">
+                                                            <input class="form-control" type="time" name="lundi-end" id="prenom">
                                                         </div>
                                                     </div>
                                                     <div class="clear"></div>
-                                                    <div class="col-md-12">
-                                                        <label for="description">Adresse</label>
-                                                        <textarea cols="100%" style="display: block ;width: 100%" rows="5"></textarea>
-                                                    </div>
                                                     <div class="choice-fields">
-                                                        <div class="move-left col-md-6">
-                                                            <label for="title">email</label>
-                                                            <input class="form-control" type="text">
+                                                        <div class="move-left col-md-2">
+                                                            <label for="title">Mardi</label>
                                                         </div>
-                                                        <div class="move-left col-md-6">
-                                                            <label for="price">Tele</label>
-                                                            <input class="form-control" type="text">
+                                                        <div class="move-left col-md-2">
+                                                            <input class="form-control" type="time" name="mardi-start" id="nom">
+                                                        </div>
+                                                        <div class="move-left col-md-2">
+                                                            <input class="form-control" type="time" name="mardi-end" id="prenom">
                                                         </div>
                                                     </div>
                                                     <div class="clear"></div>
+                                                    <div class="choice-fields">
+                                                        <div class="move-left col-md-2">
+                                                            <label for="title">Mercredi</label>
+                                                        </div>
+                                                        <div class="move-left col-md-2">
+                                                            <input class="form-control" type="time" name="Mercredi-start" id="nom">
+                                                        </div>
+                                                        <div class="move-left col-md-2">
+                                                            <input class="form-control" type="time" name="Mercredi-end" id="prenom">
+                                                        </div>
+                                                    </div>
+                                                    <div class="clear"></div>
+                                                    <div class="choice-fields">
+                                                        <div class="move-left col-md-2">
+                                                            <label for="title">Jeudi</label>
+                                                        </div>
+                                                        <div class="move-left col-md-2">
+                                                            <input class="form-control" type="time" name="jeudi-start" id="nom">
+                                                        </div>
+                                                        <div class="move-left col-md-2">
+                                                            <input class="form-control" type="time" name="jeudi-end" id="prenom">
+                                                        </div>
+                                                    </div>
+                                                    <div class="clear"></div>
+                                                    <div class="choice-fields">
+                                                        <div class="move-left col-md-2">
+                                                            <label for="title">Samedi</label>
+                                                        </div>
+                                                        <div class="move-left col-md-2">
+                                                            <input class="form-control" type="time" name="Samedi-start" id="nom">
+                                                        </div>
+                                                        <div class="move-left col-md-2">
+                                                            <input class="form-control" type="time" name="Samedi-end" id="prenom">
+                                                        </div>
+                                                    </div>
+                                                    <div class="clear"></div>
+                                                    <div class="choice-fields">
+                                                        <div class="move-left col-md-2">
+                                                            <label for="title">Dimanche</label>
+                                                        </div>
+                                                        <div class="move-left col-md-2">
+                                                            <input class="form-control" type="time" name="Dimanche-start" id="nom">
+                                                        </div>
+                                                        <div class="move-left col-md-2">
+                                                            <input class="form-control" type="time" name="Dimanche-end" id="prenom">
+                                                        </div>
+                                                    </div>
+                                                    <div class="clear"></div>
+                                                    <input type="submit"  class="save" value="save">
+
                                                     <div class="btn-add">
                                                         <a href="#" class="save">Enrgistrer</a>
                                                         <a href="#" class="reset">Réintialiser</a>
                                                     </div>
                                                 </form>
                                             </div>
+
                                         </div>
                                     </div>
 
@@ -140,61 +212,71 @@
 
     </div>
 
-    <div class="row">
-        <ul class="nav nav-pills wow bounceInLeft">
-            <li class="" role="presentation">
-                <a data-toggle="tab" href="#etudiant1" aria-expanded="false">Le Bureau Des Etudiants </a></li>
-            <li class="" role="presentation">
-                <a data-toggle="tab" href="#etudiant12" aria-expanded="false">Le Bureau Des Etudiants </a></li>
-        </ul>
-        <div class="col-md-10 tab-border">
-            <div class="tab-content wow bounceInRight">
-                <div class="tab-pane fade" id="etudiant1">
-                    <div class="col-md-6">
-                        <p>Le BDE propose, tout au long de l'année universitaire, un programme riche et varié d'activités culturelles et sportives et d'évènements thématiques. Plusieurs clubs participent à l'animation de la vie étudiante dans notre université :<br>
-                            Le Club : Musique,de Chant,de Danse,Informatique,Soutien Scolaire,Sport,Humanitairen,Culture,événementiel</p>
-                    </div>
-                    <div class="col-md-6 ">
-                        <img src="http://webeuz-development.com/mundiapolis-cms/sites/all/themes/mundiapolis/images/tabs-img2.jpg"></div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-10 tab-border">
-            <div class="tab-content wow bounceInRight">
-                <div class="tab-pane fade" id="etudiant12">
-                    <div class="col-md-6">
-                        <p>Le BDE propose, tout au long de l'année universitaire, un programme riche et varié d'activités culturelles et sportives et d'évènements thématiques. Plusieurs clubs participent à l'animation de la vie étudiante dans notre université :<br>
-                            Le Club : Musique,de Chant,de Danse,Informatique,Soutien Scolaire,Sport,Humanitairen,Culture,événementiel</p>
-                    </div>
-                    <div class="col-md-6 ">
-                        <img src="http://webeuz-development.com/mundiapolis-cms/sites/all/themes/mundiapolis/images/tabs-img2.jpg"></div>
-                </div>
-            </div>
-        </div>
-    </div>
+
 {% endblock %}
 {% block javascripts %}
     {{ parent() }}
     <script>
-//        $('#add-userform-add').on('submit',function(e){
-//            e.preventDefault();
-//            var $form=$(this);
-//            $.post($form.attr('action'), $form.serializeArray())
-//                    .done(function(data, text, jqxhr){
-//                        $('a.epil-user-item').prepend(jqxhr.responseText);
-//                    })
-//                    .fail(function(jqxhr){
-//                        alert(jqxhr.responseText);
-//                    })
-//                    .always(function() {
-//
-//                    });
-//        });
-        $(".del_user").on('click',function(e){
+
+        $('#edit').on('submit',function(e){
+            e.preventDefault();
+            var $form=$(this);
+            $.post($form.attr('action'), $form.serializeArray())
+                    .done(function(data, text, jqxhr){
+                    })
+                    .fail(function(jqxhr){
+                        alert(jqxhr.responseText);
+                    })
+                    .always(function() {
+
+                    });
+        });
+        /*$ (".epil-user-item").on('click',function(e) {
+            e.preventDefault();
+            $a = $(this);
+            var url = $a.attr('href');
+            $.ajax({
+                url: url,
+                success:
+                        function(retour){
+                            var user=retour["user"];
+
+                            //var nbr= auto["id"].length;
+                            var str="";
+                            var nom="";
+                            var prenom="";
+                            var id="";
+                            for(var j=0 ; j< user["id"].length; j++){
+                                nom+=  user['nom'][j]  ;
+                                prenom+=  user['prenom'][j]  ;
+                                id+=  user['id'][j]  ;
+
+                            }
+                            $('#prenom').val(prenom);
+                            $('#nom').val(nom);
+                            $('#user').addClass('active ');
+                            $('#edit-user').addClass('active in');
+                            $('#service').removeClass('active');
+                            $('#agenda').removeClass('active');
+                            $('#acc').removeClass('active');
+                            $('#off').removeClass('active');
+                            $('#edit-service').removeClass('active');
+                            $('#edit-agenda').removeClass('active');
+                            $('#acces').removeClass('active');
+                            $('#jour-off').removeClass('active');
+                           */ {#var url = '{{ path('user_edit_ajax', {'id': 1111 }) }}';#}/*
+                            $('#edit').attr('action', url.replace("1111", id));
+
+                            //jQuery("#nbr_notif").append(jQuery("<span class='badge badge-success'>"+nbr+"</span>"));
+                        }
+
+            });
+        });*/
+       $ (".del_user").on('click',function(e){
             e.preventDefault();
             $a =  $(this);
-            var url = $a.attr('href');
-            var ok=swal({   title: "Are you sure?",   text: "You will not be able to recover this imaginary file!",   type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",   confirmButtonText: "Yes, delete it!",   cancelButtonText: "No, cancel plx!",   closeOnConfirm: false,   closeOnCancel: false }, function(isConfirm){   if (isConfirm) {     swal("Deleted!", "Your imaginary file has been deleted.", "success");   } else {     swal("Cancelled", "Your imaginary file is safe :)", "error");   } });
+
+           var ok=swal({   title: "Are you sure?",   text: "You will not be able to recover this imaginary file!",   type: "warning",   showCancelButton: true,   confirmButtonColor: "#DD6B55",   confirmButtonText: "Yes, delete it!",   cancelButtonText: "No, cancel plx!",   closeOnConfirm: false,   closeOnCancel: false }, function(isConfirm){   if (isConfirm) {     swal("Deleted!", "Your imaginary file has been deleted.", "success");   } else {     swal("Cancelled", "Your imaginary file is safe :)", "error");   } });
             if (ok){
                 $.ajax(url,{
                     success: function () {
@@ -204,6 +286,97 @@
                 })            }
             return ok ;
         });
+
+
+$ (".epil-user-item1").on('click',function(e) {
+    e.preventDefault();
+    $a = $(this);
+    var url = $a.attr('href');
+    $.ajax({
+        url: url,
+        success:
+                function(retour){
+                    var user=retour["zones"];
+                    //var nbr= auto["id"].length;
+                    var str="";
+                    for(var j=0 ; j< user["id"].length; j++){
+                        str+=" "+user["title"][j]+" ";
+                    }
+                    jQuery("#list").html(str);
+
+                    //jQuery("#nbr_notif").append(jQuery("<span class='badge badge-success'>"+nbr+"</span>"));
+                }
+
+    });
+
+});
+        $ (".epil-user-item").on('click',function(e) {
+            e.preventDefault();
+            $a = $(this);
+            var url = $a.attr('href');
+            $.ajax({
+
+
+                        //On lui indique le type d'envoie des informations
+
+                        type: 'POST',
+
+                        //On lui indique le chemin de la fonction
+
+                        url:  url,
+
+                        success: function(response)
+
+                        {
+
+                            $('#cordonner').html(response);
+                            document.location="#cordonner";
+
+
+                        }
+
+                    }
+
+            )});
+        $ (".epil-user-item").on('click',function(e) {
+            e.preventDefault();
+            $a = $(this);
+            var id = $a.data('id');
+            var route = '{{ path('ajax_select_user1', { 'id': "PLACEHOLDER" }) }}';
+            route = route.replace("PLACEHOLDER", id);
+            $.ajax({
+
+
+                        //On lui indique le type d'envoie des informations
+
+                        type: 'POST',
+
+                        //On lui indique le chemin de la fonction
+
+                        url:  route,  //<==> editAction($id_customer_selected)
+
+
+
+                        //On lui donne la valeur du choix qu'on a fait, et id est la variable qui va contenir notre valeur, nous la retrouvons dans notre controller
+
+
+
+
+                        //Enfin nous lui disons de remplir notre formulaire avec le resultat
+
+                        success: function(response)
+
+                        {
+
+                            $('#cordonner1').html(response);
+                            document.location="#cordonner1";
+
+
+                        }
+
+                    }
+
+            )});
     </script>
 {%  endblock %}
 

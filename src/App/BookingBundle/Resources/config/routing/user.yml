@@ -28,4 +28,10 @@ user_delete:
 user_del:
     path:     /supp
     defaults: { _controller: "AppBookingBundle:User:ajaxdel" }
+ajax_select_user:
+    path:     /{id}/select
+    defaults: { _controller: "AppBookingBundle:User:AjaxSelect" }
+ajax_select_user1:
+    path:     /{id}/select1
+    defaults: { _controller: "AppBookingBundle:User:AjaxSelect1" }
 

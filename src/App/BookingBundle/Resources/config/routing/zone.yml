@@ -21,4 +21,7 @@ zone_edit:
 zone_delete:
     path:     /{id}/delete
     defaults: { _controller: "AppBookingBundle:Zone:delete" }
+services_select:
+    path:     /{id}/select
+    defaults: { _controller: "AppBookingBundle:Zone:getuserbyservice" }
 

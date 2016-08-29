@@ -56,6 +56,16 @@ class User implements UserInterface, AdvancedUserInterface
     private $tele;
 
     /**
+     * @ORM\ManyToMany(targetEntity="App\BookingBundle\Entity\Services", inversedBy="user")
+     * @ORM\JoinTable(name="services_user",
+     *      joinColumns={@ORM\JoinColumn(name="services_id", referencedColumnName="id" )},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="user_id", referencedColumnName="id" )}
+     * )
+     */
+
+    private $services;
+
+    /**
      * @var string
      *
      * @Assert\Email(
@@ -508,6 +518,22 @@ class User implements UserInterface, AdvancedUserInterface
     public function setTele($tele)
     {
         $this->tele = $tele;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getServices()
+    {
+        return $this->services;
+    }
+
+    /**
+     * @param mixed $services
+     */
+    public function setServices($services)
+    {
+        $this->services = $services;
     }
 
 

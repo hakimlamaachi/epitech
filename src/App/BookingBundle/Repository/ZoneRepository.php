@@ -10,4 +10,13 @@ namespace App\BookingBundle\Repository;
  */
 class ZoneRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getZoneByService($id, $obj=false) {
+        $qb = $this->createQueryBuilder('z')
+            ->addSelect('z')
+            ->leftJoin('z.services', 's')
+            ->andWhere('s.id = :id')
+            ->setParameter('id', $id);
+        return $qb->getQuery()->getResult();
+       // return $qb->getQuery()->getArrayResult();
+    }
 }

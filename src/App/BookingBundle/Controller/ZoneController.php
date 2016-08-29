@@ -2,6 +2,7 @@
 
 namespace App\BookingBundle\Controller;
 
+use Symfony\Component\BrowserKit\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -107,6 +108,31 @@ class ZoneController extends Controller
 
 
         return $this->redirectToRoute('services_index');
+    }
+    public function getuserbyserviceAction(Request $request, $id)
+    {
+
+        $em = $this->getDoctrine()->getManager();
+        $zones = $em->getRepository('AppBookingBundle:Zone')->getZoneByService($id);
+        $array_user = array();
+        $array_user["id"] = array();
+        $array_user["title"] = array();
+
+
+        for ($i = 0; $i < count($zones); $i++) {
+
+        array_push($array_user["id"], $zones[$i]->getId());
+        array_push($array_user["title"], $zones[$i]->getTitle());
+        }
+        $json = json_encode(array(
+            'zones' => $array_user,
+        ));
+
+        $response = new \Symfony\Component\HttpFoundation\Response();
+        $response->headers->set('Content-Type', 'application/json');
+        $response->setContent($json);
+        return $response;
+
     }  /*  public function deletezoneinserviceAction($id,$idservices)
     {
         $em = $this->getDoctrine()->getManager();
